@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.sadikov.springcourse.Config.DAO.PersonDAO;
 import ru.sadikov.springcourse.Config.Models.Person;
 
+import java.sql.SQLException;
+
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
@@ -16,7 +18,7 @@ public class PeopleController {
     private PersonDAO personDAO;
     // получение всех людей из DAO
     @GetMapping()
-    public String index(Model model) {
+    public String index(Model model) throws SQLException {
         model.addAttribute("people", personDAO.index());
         return "people/index";
     }
@@ -37,7 +39,7 @@ public class PeopleController {
     // create person
     @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person,
-                         BindingResult bindingResult) {
+                         BindingResult bindingResult) throws SQLException {
         if (bindingResult.hasErrors()) {
             return "people/new";
         }
@@ -58,7 +60,7 @@ public class PeopleController {
         if (bindingResult.hasErrors()) {
             return "people/edit";
         }
-        personDAO.update(id, person);
+        //personDAO.update(id, person);
         return "redirect:/people";
     }
 

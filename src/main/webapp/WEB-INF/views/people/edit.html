@@ -10,11 +10,11 @@
   <input type="text" th:field="*{name}" id="name">
   <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red">Name error</div>
   <br>
-    <label for="age">Enter name:</label>
+    <label for="age">Enter age:</label>
     <input type="text" th:field="*{age}" id="age">
   <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color: red">Age error</div>
     <br>
-    <label for="email">Enter name:</label>
+    <label for="email">Enter email:</label>
     <input type="text" th:field="*{email}" id="email">
   <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red">Email error</div>
     <br>
