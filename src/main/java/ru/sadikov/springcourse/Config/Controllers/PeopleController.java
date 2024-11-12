@@ -25,7 +25,7 @@ public class PeopleController {
     // получение человека по Id
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id,
-                       Model model) {
+                       Model model) throws SQLException {
         model.addAttribute("person", personDAO.show(id));
         return "people/show";
     }
@@ -48,7 +48,7 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public String edit(Model model, @PathVariable("id") int id) throws SQLException {
         model.addAttribute("person", personDAO.show(id));
         return "people/edit";
     }
@@ -56,16 +56,16 @@ public class PeopleController {
     @PostMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid  Person person,
                          BindingResult bindingResult,
-                         @PathVariable("id") int id) {
+                         @PathVariable("id") int id) throws SQLException {
         if (bindingResult.hasErrors()) {
             return "people/edit";
         }
-        //personDAO.update(id, person);
+        personDAO.update(id, person);
         return "redirect:/people";
     }
 
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") int id) throws SQLException {
         personDAO.delete(id);
         return "redirect:/people";
     }
