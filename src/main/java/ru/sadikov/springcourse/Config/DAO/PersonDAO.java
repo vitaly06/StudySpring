@@ -10,6 +10,7 @@ import ru.sadikov.springcourse.Config.Models.Person;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class PersonDAO {
@@ -21,27 +22,32 @@ public class PersonDAO {
 
 
     public List<Person> index() throws SQLException {
-        return jdbcTemplate.query("SELECT * FROM person", new PersonMapper());
+        return jdbcTemplate.query("SELECT * FROM Person", new PersonMapper());
     }
 
     public Person show(int id) throws SQLException {
-        return jdbcTemplate.query("SELECT * FROM person WHERE id = ?", new Object[]{id},
+        return jdbcTemplate.query("SELECT * FROM Person WHERE userId = ?", new Object[]{id},
                 new PersonMapper()).stream().findAny().orElse(null);
     }
 
+    public Optional<Person> show(String email){
+        return jdbcTemplate.query("SELECT * FROM Person WHERE email = ?",
+                new Object[]{email}, new PersonMapper()).stream().findAny();
+    }
+
     public void save(Person person) throws SQLException {
-        jdbcTemplate.update("INSERT INTO Person(name, age, email) VALUES( ?, ?, ?)",
-                person.getName(), person.getAge(), person.getEmail());
+        jdbcTemplate.update("INSERT INTO Person(name, age, email, address) VALUES( ?, ?, ?, ?)",
+                person.getName(), person.getAge(), person.getEmail(), person.getAddress());
 
     }
 
     public void update(int id, Person person) throws SQLException {
-        jdbcTemplate.update("UPDATE person SET name = ?, age = ?, email = ? WHERE id = ?",
-                person.getName(), person.getAge(), person.getEmail(), id);
+        jdbcTemplate.update("UPDATE Person SET name = ?, age = ?, email = ?, address = ? WHERE id = ?",
+                person.getName(), person.getAge(), person.getEmail(), person.getAddress(), id);
     }
 
     public void delete(int id) throws SQLException {
-        jdbcTemplate.update("DELETE FROM person WHERE id = ?", id);
+        jdbcTemplate.update("DELETE FROM Person WHERE id = ?", id);
     }
 
     /////////////////////////////////////////////////
@@ -85,7 +91,7 @@ public class PersonDAO {
     private List<Person> create1000People() {
         List<Person> people = new ArrayList<Person>();
         for (int i = 0; i < 1000; i++) {
-            people.add(new Person(i, "Name" + i, 30, "test"+i+"@mail.ru"));
+            people.add(new Person(i, "Name" + i, 30, "test"+i+"@mail.ru", "fdfdfsd"));
         }
         return people;
     }

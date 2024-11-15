@@ -9,6 +9,7 @@
 <p th:text="${person.getName()}"></p>
 <p th:text="${person.getAge()}"></p>
 <p th:text="${person.getEmail()}"></p>
+<p th:text="${person.getAddress()}"></p>
 <a th:href="@{/people/{id}/edit(id=${person.getId()})}">Edit</a>
 <form th:method="POST" th:action="@{/people/delete/{id}(id=${person.getId()})}">
     <input type="submit" value="Delete"/>

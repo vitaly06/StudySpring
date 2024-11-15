@@ -8,15 +8,23 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.sadikov.springcourse.Config.DAO.PersonDAO;
 import ru.sadikov.springcourse.Config.Models.Person;
+import ru.sadikov.springcourse.Config.utli.PersonValidator;
 
 import java.sql.SQLException;
 
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
+    private final PersonDAO personDAO;
+    private final PersonValidator personValidator;
     @Autowired
-    private PersonDAO personDAO;
+    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
+        this.personDAO = personDAO;
+        this.personValidator = personValidator;
+    }
     // получение всех людей из DAO
+
+
     @GetMapping()
     public String index(Model model) throws SQLException {
         model.addAttribute("people", personDAO.index());
@@ -40,6 +48,7 @@ public class PeopleController {
     @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult) throws SQLException {
+        personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "people/new";
         }
@@ -57,6 +66,7 @@ public class PeopleController {
     public String update(@ModelAttribute("person") @Valid  Person person,
                          BindingResult bindingResult,
                          @PathVariable("id") int id) throws SQLException {
+        personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "people/edit";
         }
